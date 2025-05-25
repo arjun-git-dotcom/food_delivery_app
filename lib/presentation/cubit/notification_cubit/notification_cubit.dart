@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery_app/domain/entity/notification_entity.dart';
 import 'package:food_delivery_app/domain/usecases/notification_usecase.dart';
 import 'package:food_delivery_app/presentation/cubit/notification_cubit/notification_state.dart';
 
@@ -11,7 +12,13 @@ class NotificationCubit extends Cubit<NotificationState> {
 
   Future<void> getNotifications() async {
     try {
-      await notificationUsecase.call();
+      final streamReponse= notificationUsecase.call();
+      streamReponse.listen((notifications){
+        emit(NotificationLoaded(notifications: notifications));
+        
+
+      });
+      
     } on SocketException catch (_) {
     } catch (_) {}
   }

@@ -40,6 +40,8 @@ dependencies:
   flutter_getit: ^3.0.1
   get_it: ^7.7.0
   equatable: ^2.0.7
+  http: ^1.4.0
+  timeago: ^3.7.1
 
 dev_dependencies:
   flutter_test:

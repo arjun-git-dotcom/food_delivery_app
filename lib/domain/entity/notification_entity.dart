@@ -5,7 +5,7 @@ class NotificationEntity extends Equatable {
   final String? title;
   final String? body;
   final String? timestamp;
- const  NotificationEntity(this.image, this.title, this.body, this.timestamp);
+  const NotificationEntity({required this.image, required this.title, required this.body,required  this.timestamp});
   @override
-  List<Object?> get props => [image,title,body,timestamp];
+  List<Object?> get props => [image, title, body, timestamp];
 }

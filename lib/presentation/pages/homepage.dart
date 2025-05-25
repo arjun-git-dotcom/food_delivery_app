@@ -1,6 +1,9 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_app/constants.dart';
+import 'package:food_delivery_app/presentation/cubit/notification_cubit/notification_cubit.dart';
 import 'package:food_delivery_app/presentation/pages/widgets/search_widget.dart';
 
 class Homepage extends StatefulWidget {
@@ -13,7 +16,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<Object> itemlist = [
     "lib/assets/images/img1.png",
-    ColorConstants().textfieldColor
+    ColorConstants().blue
   ];
 
   List<Color> items = [ColorConstants().textfieldColor];
@@ -31,12 +34,13 @@ class _HomepageState extends State<Homepage> {
     } else if (item is Color) {
       return Container(
         height: 200,
-        color: item,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),color: item,),
+        
       );
     }
     return Container(
       height: 200,
-      color: ColorConstants().textfieldColor,
+      color: ColorConstants().green,
     );
   }
 
@@ -126,28 +130,33 @@ class _HomepageState extends State<Homepage> {
                       child: SearchWidget(
                     hintText: "Search for products/stores",
                   )),
-                  SizedBox(width:5 ),
+                  SizedBox(width: 5),
                   SizedBox(
                     height: 45,
                     width: 45,
                     child: Stack(
                       children: [
                         GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, "notificationPage"),
+                          onTap: () {
+                            context.read<NotificationCubit>().getNotifications();
+                            Navigator.pushNamed(context, "notificationPage");
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Stack(
-                              children:[ SizedBox(
+                            child: Stack(children: [
+                              SizedBox(
                                 height: 30,
                                 width: 30,
                                 child: Image(
                                     image: AssetImage(
                                         'lib/assets/images/bell_icon_2.png')),
-                              ),Positioned(
-                               right: 1, 
-                               top: -1,
-                                child: Image.asset("lib/assets/images/notifications_2.png"))
-                      ]),
+                              ),
+                              Positioned(
+                                  right: 1,
+                                  top: -1,
+                                  child: Image.asset(
+                                      "lib/assets/images/notifications_2.png"))
+                            ]),
                           ),
                         ),
                         Positioned(
@@ -190,40 +199,43 @@ class _HomepageState extends State<Homepage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                            if (index==0 || index==1 ||index==2 || index==7)
-                            Stack(
-                          children:[ SizedBox(
-                            height: 70,
-                            width: 70,
-                            child:
-                              Card(
-                                elevation: 2,
-                                child: Image(
-                                  image: AssetImage(
-                                    imagePaths[index],
+                        if (index == 0 ||
+                            index == 1 ||
+                            index == 2 ||
+                            index == 7)
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 70,
+                                width: 70,
+                                child: Card(
+                                  elevation: 2,
+                                  child: Image(
+                                    image: AssetImage(
+                                      imagePaths[index],
+                                    ),
                                   ),
                                 ),
                               ),
-                             
-                                                
-                          ), Positioned(
-                            right: 1,
-                            child: Image.asset("lib/assets/images/10_percent_off.png"))],
-                        )else
-                        
-                                SizedBox(
-                          height: 70,
-                          width: 70,
-                          child: Card(
-                            elevation: 2,
-                            child: Image(
-                              image: AssetImage(
-                                imagePaths[index],
+                              Positioned(
+                                  right: 1,
+                                  child: Image.asset(
+                                      "lib/assets/images/10_percent_off.png"))
+                            ],
+                          )
+                        else
+                          SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: Card(
+                              elevation: 2,
+                              child: Image(
+                                image: AssetImage(
+                                  imagePaths[index],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-
                         Text(
                           itemnames[index],
                           style: TextStyle(
@@ -254,6 +266,7 @@ class _HomepageState extends State<Homepage> {
                 'Top picks for you',
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
               ),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 0.8),
                 child: CarouselSlider(
@@ -282,7 +295,8 @@ class _HomepageState extends State<Homepage> {
                         'See all',
                         style: TextStyle(
                             color: ColorConstants().green,
-                            fontWeight: FontWeight.w800),
+                            fontWeight: FontWeight.w800,
+                            fontSize: 15),
                       )
                     ],
                   ),
@@ -318,40 +332,47 @@ class _HomepageState extends State<Homepage> {
                     height: 10,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Image.asset("lib/assets/images/refer_and_earn.png"),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Nearby stores',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        'See all',
-                        style: TextStyle(
-                            color: ColorConstants().green,
-                            fontWeight: FontWeight.w800),
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                       
+                        Text(
+                          'Nearby stores',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          'See all',
+                          style: TextStyle(
+                              color: ColorConstants().green,
+                              fontWeight: FontWeight.w800,fontSize: 15),
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  SizedBox(
-                    child: Stack(children: [
-                      Image.asset("lib/assets/images/freshly_baker.png"),
-                      Positioned(
-                          bottom: 2,
-                          right: 0.1,
-                          child: Image.asset(
-                              "lib/assets/images/freshly_bakers_items.png"))
-                    ]),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: SizedBox(
+                      child: Stack(children: [
+                        Image.asset("lib/assets/images/freshly_baker.png"),
+                        Positioned(
+                            bottom: 2,
+                            right: 0.1,
+                            child: Image.asset(
+                                "lib/assets/images/freshly_bakers_items.png"))
+                      ]),
+                    ),
                   ),
                   SizedBox(
                     height: 30,

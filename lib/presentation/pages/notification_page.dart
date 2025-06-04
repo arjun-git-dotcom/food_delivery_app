@@ -41,7 +41,6 @@ class _NotificationPageState extends State<NotificationPage> {
       body: BlocBuilder<NotificationCubit, NotificationState>(
         builder: (context, state) {
           if (state is NotificationLoaded) {
-            print(state.notifications.length);
             return ListView.separated(
               itemCount: state.notifications.length,
               itemBuilder: (context, index) {
